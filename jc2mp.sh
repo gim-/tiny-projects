@@ -66,10 +66,18 @@ changeOptions() {
   echo -en "${WHITE}Port (7777) = ${NC}"; read bind_port
   echo -en "${WHITE}Server name ('JC2-MP Server') = ${NC}"; read name
   echo -en "${WHITE}Description ('No description available.') = ${NC}"; read description
-  if [ -n $max_players ]; then sed -i "s/MaxPlayers.*/MaxPlayers = $max_players,/g" config.lua; fi
-  if [ -n $bind_port ]; then sed -i "s/BindPort.*/BindPort = $bind_port,/g" config.lua; fi
-  if [ -n $name ]; then sed -i "s/Name.*/Name = $name,/g" config.lua; fi
-  if [ -n $description ]; then sed -i "s/Description.*/Description = $description,/g" config.lua; fi
+  if [ ! -z $max_players ]; then
+    sed -i "s/MaxPlayers.*/MaxPlayers = $max_players,/g" config.lua
+  fi
+  if [ ! -z $bind_port ]; then
+    sed -i "s/BindPort.*/BindPort = $bind_port,/g" config.lua
+  fi
+  if [ ! -z $name ]; then
+    sed -i "s/Name.*/Name = $name,/g" config.lua
+  fi
+  if [ ! -z $description ]; then
+    sed -i "s/Description.*/Description = $description,/g" config.lua;
+  fi
 
   echo -e "${WHITE}New configuration applied!${NC}"
   
