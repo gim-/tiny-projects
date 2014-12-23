@@ -119,7 +119,7 @@ cmdLoop() {
         showStatus
         ;;
 
-      "reinstall")
+      "update")
         installSteamcmd
         updateServer
         ;;
@@ -155,7 +155,7 @@ cmdLoop() {
         echo -e "${WHITE}editconfig  - open 'config.lua' using ${EDITOR}${NC}"
         echo -e "${WHITE}send [text] - sends text to the server console (http://wiki.jc-mp.com/Server/Console)${NC}"
         echo -e "${WHITE}console     - open server console ${RED}[!]${WHITE}(press ctrl+a and then ctrl+d to exit without terminating the server)${NC}"
-        echo -e "${WHITE}reinstall   - validates/reistalls the server${NC}"
+        echo -e "${WHITE}update      - validates/updates the server${NC}"
         echo -e "${WHITE}exit        - exit from the current command line${NC}"
         ;;
 
