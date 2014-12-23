@@ -35,6 +35,9 @@ NC="\033[0m"
 if [ -f $config_file ]; then
   source $config_file
 fi
+if [ -z $EDITOR ]; then
+  EDITOR="nano"
+fi
 
 installSteamcmd() {
   if [ -s $steamcmd_dir/steamcmd.sh ]; then
