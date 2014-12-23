@@ -22,8 +22,8 @@
 jc2mp_steamid="261140"
 #jc2mp_steamid="261140 -beta publicbeta"
 
-steamcmd_dir="$HOME/test/steamcmd"
-jc2mp_server_dir="$HOME/test/jc2mp-server"
+steamcmd_dir="$HOME/.steamcmd"
+jc2mp_server_dir="$HOME/jc2mp-server"
 session_name="jc2mp"
 config_file="$HOME/.config/jc2mp-server-manager/server-manager.conf"
 
