@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # JC2-MP server managing script which simplifies server installation,
 # update and administration. It uses GNU Screen which should be
