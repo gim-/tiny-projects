@@ -213,8 +213,8 @@ main() {
     echo -e "${WHITE}Installing JC2-MP server...${NC}"
     updateServer
     changeOptions
+    echo ""
   fi
-  echo ""
   cmdLoop
 }
 main
