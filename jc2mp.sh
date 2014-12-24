@@ -38,6 +38,13 @@ fi
 if [ -z "$EDITOR" ]; then
   EDITOR="nano"
 fi
+if [ -z "$(command -v $EDITOR)" ]; then
+  EDITOR="vi"
+fi
+if [ -z "$(command -v screen)" ]; then
+  echo -e "${RED}Looks like you don't have GNU Screen installed.${NC}"
+  echo -e "${RED}You won't be able to start manage your server!${NC}"
+fi
 
 installSteamcmd() {
   if [ -s "$steamcmd_dir/steamcmd.sh" ]; then
@@ -59,7 +66,7 @@ updateServer() {
 }
 
 changeOptions() {
-  cd $jc2mp_server_dir
+  cd "$jc2mp_server_dir"
   cp default_config.lua config.lua
 
   echo -en "${WHITE}Max players (5000) = ${NC}"; read max_players
@@ -85,17 +92,20 @@ changeOptions() {
 
 startServer() {
   echo -e "${WHITE}Starting server...${NC}"
-  cd $jc2mp_server_dir
+  cd "$jc2mp_server_dir"
   screen -dmS $session_name ./Jcmp-Server
 }
 
 stopServer() {
   echo -e "${WHITE}Stopping server...${NC}"
   screen -S $session_name -X quit
+  while [ -n "$(screen -ls $session_name | grep $session_name)" ]; do
+    sleep 1
+  done
 }
 
 showStatus() {
-  if [ "$(pgrep 'screen')" ]; then
+  if [ -n "$(screen -ls $session_name | grep $session_name)" ]; then
     echo -e "${WHITE}Server status:${GREEN} up${NC}"
   else
     echo -e "${WHITE}Server status:${RED} down${NC}"
