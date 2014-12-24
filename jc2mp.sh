@@ -32,19 +32,19 @@ GREEN="\033[1;32m"
 WHITE="\033[1;37m"
 NC="\033[0m"
 
-if [ -f $config_file ]; then
+if [ -f "$config_file" ]; then
   source $config_file
 fi
-if [ -z $EDITOR ]; then
+if [ -z "$EDITOR" ]; then
   EDITOR="nano"
 fi
 
 installSteamcmd() {
-  if [ -s $steamcmd_dir/steamcmd.sh ]; then
+  if [ -s "$steamcmd_dir/steamcmd.sh" ]; then
     $steamcmd_dir/steamcmd.sh +login anonymous +force_install_dir $jc2mp_server_dir +app_update $jc2mp_steamid validate +quit
   else
-    mkdir -p $steamcmd_dir
-    cd $steamcmd_dir
+    mkdir -p "$steamcmd_dir"
+    cd "$steamcmd_dir"
     wget http://media.steampowered.com/installer/steamcmd_linux.tar.gz
     tar -xvzf steamcmd_linux.tar.gz > /dev/null 2>&1
     rm steamcmd_linux.tar.gz
@@ -53,7 +53,7 @@ installSteamcmd() {
 
 updateServer() {
   $steamcmd_dir/steamcmd.sh +login anonymous +force_install_dir $jc2mp_server_dir +app_update $jc2mp_steamid +quit
-  if [ ! -f $jc2mp_server_dir/libstdc++.so.6 ]; then
+  if [ ! -f "$jc2mp_server_dir/libstdc++.so.6" ]; then
     ln -s $steamcmd_dir/linux32/libstdc++.so.6 $jc2mp_server_dir/libstdc++.so.6
   fi
 }
@@ -66,17 +66,17 @@ changeOptions() {
   echo -en "${WHITE}Port (7777) = ${NC}"; read bind_port
   echo -en "${WHITE}Server name ('JC2-MP Server') = ${NC}"; read name
   echo -en "${WHITE}Description ('No description available.') = ${NC}"; read description
-  if [ ! -z $max_players ]; then
+  if [ -n "$max_players" ]; then
     sed -i "s/MaxPlayers.*/MaxPlayers = $max_players,/g" config.lua
   fi
-  if [ ! -z $bind_port ]; then
+  if [ -n "$bind_port" ]; then
     sed -i "s/BindPort.*/BindPort = $bind_port,/g" config.lua
   fi
-  if [ ! -z $name ]; then
-    sed -i "s/Name.*/Name = $name,/g" config.lua
+  if [ -n "$name" ]; then
+    sed -i "s/Name.*/Name = \"$name\",/g" config.lua
   fi
-  if [ ! -z $description ]; then
-    sed -i "s/Description.*/Description = $description,/g" config.lua;
+  if [ -n "$description" ]; then
+    sed -i "s/Description.*/Description = \"$description\",/g" config.lua;
   fi
 
   echo -e "${WHITE}New configuration applied!${NC}"
@@ -95,7 +95,7 @@ stopServer() {
 }
 
 showStatus() {
-  if [ $(pgrep 'screen') ]; then
+  if [ "$(pgrep 'screen')" ]; then
     echo -e "${WHITE}Server status:${GREEN} up${NC}"
   else
     echo -e "${WHITE}Server status:${RED} down${NC}"
@@ -177,7 +177,7 @@ cmdLoop() {
 }
 
 main() {
-  if [ ! -f $config_file ]; then
+  if [ ! -f "$config_file" ]; then
     echo -e "${WHITE}Looks like you're running this script for the first time.${NC}"
     echo -e "${WHITE}Do you want to install JC2-MP server now? [Y/n]${NC}"
     echo -en "${GREEN}>> ${NC}"; read answer
@@ -189,7 +189,7 @@ main() {
     echo -e "${WHITE}Where do you want your server to be installed?${NC}" 
     echo -e "${WHITE}Press Enter to use '$jc2mp_server_dir' or specify your own ABSOLUTE path${NC}"
     echo -en "${GREEN}>> ${NC}"; read answer
-    if [ -n $answer ]; then
+    if [ -n "$answer" ]; then
       $jc2mp_server_dir = $answer
     fi
 
