@@ -67,6 +67,7 @@ updateServer() {
     echo -en "${WHITE}Would you like to restart server now? [y/N] ${NC}"; read answer
     case $answer in
       [yY]*)
+        sendToConsole "say Restarting server..."
         stopServer
         startServer
         showStatus
@@ -122,6 +123,11 @@ showStatus() {
   fi
 }
 
+sendToConsole() {
+  screen -S jc2mp -X stuff "$1
+"  
+}
+
 cmdLoop() {
   echo -e "${WHITE}Welcome to the JC2-MP server management tool!${NC}"
   echo -e "${WHITE}You can terminate this script safely, it won't stop the server.${NC}"
@@ -142,6 +148,7 @@ cmdLoop() {
         ;;
 
       "restart")
+        sendToConsole "say Restarting server..."
         stopServer
         startServer
         showStatus
@@ -166,8 +173,7 @@ cmdLoop() {
 
       "send "*)
         echo -e "${WHITE}Sending:${NC} ${cmd#* }"
-        screen -S jc2mp -X stuff "${cmd#* }
-"
+        sendToConsole "${cmd#* }"
         ;;
 
       "console")
