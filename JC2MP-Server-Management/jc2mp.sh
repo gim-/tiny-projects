@@ -63,6 +63,16 @@ updateServer() {
   if [ ! -f "$jc2mp_server_dir/libstdc++.so.6" ]; then
     ln -s $steamcmd_dir/linux32/libstdc++.so.6 $jc2mp_server_dir/libstdc++.so.6
   fi
+  if [ -n "$(screen -ls $session_name | grep $session_name)" ]; then
+    echo -en "${WHITE}Would you like to restart server now? [y/N] ${NC}"; read answer
+    case $answer in
+      [yY]*)
+        stopServer
+        startServer
+        showStatus
+        ;;
+    esac
+  fi
 }
 
 changeOptions() {
