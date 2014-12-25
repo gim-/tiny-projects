@@ -32,6 +32,10 @@ GREEN="\033[1;32m"
 WHITE="\033[1;37m"
 NC="\033[0m"
 
+if [ "$(id -u)" == "0" ]; then
+  echo "You really should not run this script as root!"
+  exit 0
+fi
 if [ -f "$config_file" ]; then
   source $config_file
 fi
