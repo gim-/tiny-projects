@@ -47,7 +47,7 @@ if [ -z "$(command -v $EDITOR)" ]; then
 fi
 if [ -z "$(command -v screen)" ]; then
   echo -e "${RED}Looks like you don't have GNU Screen installed.${NC}"
-  echo -e "${RED}You won't be able to start manage your server!${NC}"
+  echo -e "${RED}You won't be able to start your server!${NC}"
 fi
 
 installSteamcmd() {
