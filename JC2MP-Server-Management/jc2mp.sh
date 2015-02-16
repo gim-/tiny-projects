@@ -19,11 +19,12 @@
 # limitations under the License.
 #
 
-jc2mp_steamid="261140"
-#jc2mp_steamid="261140 -beta publicbeta"
+steamid="261140"
+#steamid="261140 -beta publicbeta"
 
-steamcmd_dir="$HOME/.steamcmd"
-jc2mp_server_dir="$HOME/jc2mp-server"
+steamcmd_dir="$HOME/.local/share/steamcmd"
+steamcmd_dir_legacy="$HOME/.steamcmd"
+server_dir="$HOME/jc2mp-server"
 session_name="jc2mp"
 config_file="$HOME/.config/jc2mp-server-manager/server-manager.conf"
 
@@ -49,10 +50,14 @@ if [ -z "$(command -v screen)" ]; then
   echo -e "${RED}Looks like you don't have GNU Screen installed.${NC}"
   echo -e "${RED}You won't be able to start your server!${NC}"
 fi
+if [ -d "$steamcmd_dir_legacy" ]; then
+  mkdir -p "${steamcmd_dir%/*}"
+  mv "$steamcmd_dir_legacy" "$steamcmd_dir"
+fi
 
 installSteamcmd() {
   if [ -s "$steamcmd_dir/steamcmd.sh" ]; then
-    $steamcmd_dir/steamcmd.sh +login anonymous +force_install_dir $jc2mp_server_dir +app_update $jc2mp_steamid validate +quit
+    $steamcmd_dir/steamcmd.sh +login anonymous +force_install_dir $server_dir +app_update $steamid validate +quit
   else
     mkdir -p "$steamcmd_dir"
     cd "$steamcmd_dir"
@@ -63,9 +68,9 @@ installSteamcmd() {
 }
 
 updateServer() {
-  $steamcmd_dir/steamcmd.sh +login anonymous +force_install_dir $jc2mp_server_dir +app_update $jc2mp_steamid +quit
-  if [ ! -f "$jc2mp_server_dir/libstdc++.so.6" ]; then
-    ln -s $steamcmd_dir/linux32/libstdc++.so.6 $jc2mp_server_dir/libstdc++.so.6
+  $steamcmd_dir/steamcmd.sh +login anonymous +force_install_dir $server_dir +app_update $steamid +quit
+  if [ ! -f "$server_dir/libstdc++.so.6" ]; then
+    ln -s $steamcmd_dir/linux32/libstdc++.so.6 $server_dir/libstdc++.so.6
   fi
   if [ -n "$(screen -ls $session_name | grep $session_name)" ]; then
     echo -en "${WHITE}Would you like to restart server now? [y/N] ${NC}"; read answer
@@ -81,7 +86,7 @@ updateServer() {
 }
 
 changeOptions() {
-  cd "$jc2mp_server_dir"
+  cd "$server_dir"
   cp default_config.lua config.lua
 
   echo -en "${WHITE}Max players (5000) = ${NC}"; read max_players
@@ -107,7 +112,7 @@ changeOptions() {
 
 startServer() {
   echo -e "${WHITE}Starting server...${NC}"
-  cd "$jc2mp_server_dir"
+  cd "$server_dir"
   screen -dmS $session_name ./Jcmp-Server
 }
 
@@ -128,7 +133,7 @@ showStatus() {
 }
 
 sendToConsole() {
-  screen -S jc2mp -X stuff "$1
+  screen -S $session_name -X stuff "$1
 "  
 }
 
@@ -168,7 +173,7 @@ cmdLoop() {
         ;;
 
       "editconfig")
-        ${EDITOR} $jc2mp_server_dir/config.lua
+        ${EDITOR} $server_dir/config.lua
         ;;
 
       "status")
@@ -217,15 +222,15 @@ main() {
     esac
 
     echo -e "${WHITE}Where do you want your server to be installed?${NC}" 
-    echo -e "${WHITE}Press Enter to use '$jc2mp_server_dir' or specify your own ABSOLUTE path${NC}"
+    echo -e "${WHITE}Press Enter to use '$server_dir' or specify your own ABSOLUTE path${NC}"
     echo -en "${GREEN}>> ${NC}"; read answer
     if [ -n "$answer" ]; then
-      $jc2mp_server_dir = $answer
+      $server_dir = $answer
     fi
 
     # Write script configuration
     mkdir -p ${config_file%/*}
-    echo "jc2mp_server_dir=$jc2mp_server_dir" > $config_file
+    echo "server_dir=$server_dir" > $config_file
 
     # First install process
     echo -e "${WHITE}Installing steamcmd...${NC}"
