@@ -1,7 +1,7 @@
-#JC2-MP Server Management Tool
+# JC2-MP Server Management Tool
 This script allows anyone to easily deploy and manage [JC2-MP](http://www.jc-mp.com/) server on GNU/Linux (or any \*nix) operating system.
 
-##The script provides:
+## The script provides:
 * Automatic user-friendly JC2-MP server installation
 * Server management: start, stop, restart
 * Server update
